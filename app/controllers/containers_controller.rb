@@ -3,7 +3,7 @@ class ContainersController < ApplicationController
   before_action :set_container, only: [:show, :update, :destroy]
 
   def index
-    containers = @user.containers
+    containers = @user.containers.includes(:contents)
     render json: containers, include: :contents
   end
 

@@ -1,7 +1,8 @@
 class CreationLogsController < ApplicationController
 
   def index
-    render json: CreationLog.all
+    creation_logs = CreationLog.includes(:team, :container)
+    render json: creation_logs
   end
 
   def show
