@@ -19,7 +19,11 @@ function Products() {
   };
 
   if (loading) {
-    return <div>Loading products...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
   }
 
   function handleNameChange(e) {

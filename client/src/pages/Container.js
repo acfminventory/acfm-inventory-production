@@ -41,7 +41,11 @@ function Container() {
   }, [container]);
 
   if (!container) {
-    return <p>Loading...</p>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
   }
 
   function handleDelete() {

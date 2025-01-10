@@ -67,11 +67,19 @@ function Shelves() {
   }, []);
 
   if (loading || !user.containers) {
-    return <p></p>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
   }
 
   if (productsLoading) {
-    return <p></p>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
   }
 
   const handleShelfChange = (e) => {
