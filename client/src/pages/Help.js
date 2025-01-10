@@ -22,14 +22,9 @@ function Help() {
         "Shelves -> Filter the results using the Products and Concentrations dropdowns at the top of the page. You may select two products and concentrations if the prescription contains more than one pesticide. Use the container's shelf and row identifiers to find it in the chem shed.",
     },
     {
-      title: "How do I add a premix to the chem shed?",
+      title: "How do I add a container to the chem shed?",
       content:
-        "Shelves -> Add a Container. Be sure to include the team that created it. By default, the expiration date is set 6 months from today, and the date will turn red if the product expires within 3 months.",
-    },
-    {
-      title: "How do I add concentrates to the chem shed?",
-      content:
-        "Shelves -> Add a Container. Set the team name to Facilities, and set the expiration date to 2 years from today. By default, the expiration date is set 6 months from today, so you will need to change it.",
+        "Shelves -> Add Premix/Concentrate. Be sure to include the team that created it. Expiration dates are automatically set, but you can adjust them if needed. The date will turn red if the product expires within 3 months.",
     },
     {
       title: "How do I remove containers from the chem shed for use?",
@@ -57,6 +52,11 @@ function Help() {
         "We'll no longer be using a specific product in the future. How do I remove it from the application?",
       content:
         "Products -> Click on the Product Name -> Remove -> Yes. WARNING: This will remove the product from the products list and from any containers in inventory containing it. Only do this if you are certain all inventory containing the product has been used and you will not be using it in the future.",
+    },
+    {
+      title: "How do I see which containers expire soon?",
+      content:
+        "Shelves -> Click the filter Show Expiring Soon to see which containers have already expired, or will expire within the next 3 months.",
     },
     {
       title:
@@ -111,14 +111,14 @@ function Help() {
           allowfullscreen
           
         ></iframe> */}
-        <iframe 
-          src="https://www.youtube.com/embed/hiJ7feiMlV0?si=u8SCPel1Fwowazzx" 
-          title="How to Use This App" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" 
-          referrerpolicy="strict-origin-when-cross-origin" 
-          allowfullscreen>
-        </iframe>
+        <iframe
+          src="https://www.youtube.com/embed/hiJ7feiMlV0?si=u8SCPel1Fwowazzx"
+          title="How to Use This App"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
       </div>
     </div>
   );
