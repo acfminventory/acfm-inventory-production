@@ -28,6 +28,7 @@ function Shelves() {
   const [expires, setExpires] = useState("");
   const [filterExpiresSoon, setFilterExpiresSoon] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [modalType, setModalType] = useState("premix"); // 'premix' or 'concentrate'
 
   const showToastMessage = () => {
     toast("Container added!", {
@@ -36,7 +37,12 @@ function Shelves() {
     });
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleModalToggle = () => setIsModalOpen(!isModalOpen);
+  const handleModalToggle = () => {
+    if (isModalOpen) {
+      resetFormToDefaults();
+    }
+    setIsModalOpen(!isModalOpen);
+  };
   const navigate = useNavigate();
   const handleResetFilters = () => {
     setSelectedProduct("");
@@ -66,15 +72,7 @@ function Shelves() {
     setExpires(formattedDate);
   }, []);
 
-  if (loading || !user.containers) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-      </div>
-    );
-  }
-
-  if (productsLoading) {
+  if (loading || !user.containers || productsLoading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
@@ -184,6 +182,7 @@ function Shelves() {
   };
 
   const handleAddPremix = () => {
+    resetFormToDefaults();
     const today = new Date();
     const sixMonthsFromNow = new Date(
       today.getFullYear(),
@@ -192,11 +191,12 @@ function Shelves() {
     );
     const formattedDate = sixMonthsFromNow.toISOString().slice(0, 10);
     setExpires(formattedDate);
-
+    setModalType("premix");
     setIsModalOpen(true);
   };
 
   const handleAddConcentrate = () => {
+    resetFormToDefaults();
     const today = new Date();
     const twoYearsFromNow = new Date(
       today.getFullYear() + 2,
@@ -204,9 +204,14 @@ function Shelves() {
       today.getDate()
     );
     const formattedDate = twoYearsFromNow.toISOString().slice(0, 10);
-    setExpires(formattedDate);
-
+    // Set default team to Facilities for concentrates
+    const facilitiesTeam = teams.find((team) => team.name === "Facilities");
+    setSelectedTeam(facilitiesTeam ? facilitiesTeam.id : "");
+    setModalType("concentrate");
+    // Set concentration to 100% by default
+    setContents([{ product_id: "", concentration: "100" }]);
     setIsModalOpen(true);
+    setExpires(formattedDate);
   };
 
   const filteredContainers = user.containers.filter((container) => {
@@ -323,6 +328,12 @@ function Shelves() {
     );
   });
 
+  const resetFormToDefaults = () => {
+    setContents([{ product_id: "", concentration: "" }]);
+    setSelectedTeam("");
+    setQuantity(1);
+  };
+
   return (
     <>
       <div>
@@ -335,23 +346,25 @@ function Shelves() {
             <form className="form add-form" onSubmit={handleSubmit}>
               <div className="flex-column flex-column--modal">
                 <div className="flex-row">
-                  <label className="form__label">
-                    Team
-                    <select
-                      name="team"
-                      className="button"
-                      value={selectedTeam || ""}
-                      onChange={(e) => setSelectedTeam(e.target.value)}
-                      required
-                    >
-                      <option value="">Select a team</option>
-                      {teams.map((team) => (
-                        <option key={team.id} value={team.id}>
-                          {team.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                  {modalType === "premix" && (
+                    <label className="form__label">
+                      Team
+                      <select
+                        name="team"
+                        className="button"
+                        value={selectedTeam || ""}
+                        onChange={(e) => setSelectedTeam(e.target.value)}
+                        required
+                      >
+                        <option value="">Select a team</option>
+                        {teams.map((team) => (
+                          <option key={team.id} value={team.id}>
+                            {team.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  )}
                   <label className="form__label">
                     Shelf
                     <select
@@ -403,6 +416,7 @@ function Shelves() {
                       value={content.product_id}
                       onChange={(e) => handleContentChange(index, e)}
                       name="product_id"
+                      required
                     >
                       <option value="">Select a product</option>
                       {sortedProducts.map((product) => (
@@ -411,35 +425,42 @@ function Shelves() {
                         </option>
                       ))}
                     </select>
-                    <label className="form__label">
-                      <input
-                        className="concentration-input"
-                        type="number"
-                        placeholder="%"
-                        step="0"
-                        value={content.concentration}
-                        onChange={(e) => handleContentChange(index, e)}
-                        name="concentration"
-                      />
-                    </label>
-                    <button
-                      className="button button--remove"
-                      type="button"
-                      onClick={() => removeContentField(index)}
-                      disabled={contents.length === 1}
-                    >
-                      X
-                    </button>
+                    {modalType === "premix" && (
+                      <label className="form__label">
+                        <input
+                          className="concentration-input"
+                          type="number"
+                          placeholder="%"
+                          step="0"
+                          value={content.concentration}
+                          onChange={(e) => handleContentChange(index, e)}
+                          name="concentration"
+                          required
+                        />
+                      </label>
+                    )}
+                    {modalType === "premix" && (
+                      <button
+                        className="button button--remove"
+                        type="button"
+                        onClick={() => removeContentField(index)}
+                        disabled={contents.length === 1}
+                      >
+                        X
+                      </button>
+                    )}
                   </div>
                 ))}
 
-                <button
-                  className="button button--remove"
-                  type="button"
-                  onClick={addContentField}
-                >
-                  Add More Contents
-                </button>
+                {modalType === "premix" && (
+                  <button
+                    className="button button--remove"
+                    type="button"
+                    onClick={addContentField}
+                  >
+                    Add More Contents
+                  </button>
+                )}
               </div>
               <div className="quantity-select__container">
                 <label htmlFor="quantity">Quantity:</label>
