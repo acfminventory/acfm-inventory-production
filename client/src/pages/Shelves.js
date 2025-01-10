@@ -152,6 +152,7 @@ function Shelves() {
             // Reset state after adding containers
             setShelf(1);
             setRow("A");
+            setQuantity(1);
             setContents([{ product_id: "", concentration: "" }]);
             setSelectedTeam("");
             setIsModalOpen(false);
