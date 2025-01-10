@@ -71,7 +71,7 @@ function Container() {
         setTimeout(() => {
           setUser({ ...user, containers: updatedContainers });
           navigate("/");
-        }, 2000);
+        }, 1000);
       })
       .catch((error) => {
         console.error("Error deleting container:", error);
@@ -135,7 +135,7 @@ function Container() {
           </button>
         </div>
       </div>
-      <ToastContainer autoClose={2000} />
+      <ToastContainer autoClose={1000} />
     </div>
   );
 }

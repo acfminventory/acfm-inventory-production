@@ -924,6 +924,8 @@ span {
   color: #404c24 !important; /* Color of the progress bar */
 }
 
+
+
 @media (max-width: 650px) {
   #navbar {
     font-size: 0.9em;

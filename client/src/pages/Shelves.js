@@ -624,7 +624,7 @@ function Shelves() {
             </p>
           )}
         </div>
-        <ToastContainer />
+        <ToastContainer autoClose={1000} />
       </div>
     </>
   );

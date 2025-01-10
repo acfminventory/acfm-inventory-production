@@ -132,7 +132,7 @@ function EditContainer() {
         showToastMessage();
         setTimeout(() => {
           navigate("/");
-        }, 2000);
+        }, 1000);
       })
       .catch((error) => {
         setErrors([error.message]); // Set the error message in the errors state
@@ -285,7 +285,7 @@ function EditContainer() {
           ))}
         </div>
       </form>
-      <ToastContainer autoClose={2000} />
+      <ToastContainer autoClose={1000} />
     </div>
   );
 }

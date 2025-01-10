@@ -127,7 +127,7 @@ function Products() {
         </thead>
         <tbody>{productComps}</tbody>
       </table>
-      <ToastContainer autoClose={2000} />
+      <ToastContainer autoClose={1000} />
     </div>
   );
 }
