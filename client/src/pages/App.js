@@ -23,7 +23,11 @@ function App() {
   const { loading: productsLoading } = useContext(ProductsContext);
 
   if (userLoading || productsLoading) {
-    return <div></div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
   }
 
   if (!user) {

@@ -6,9 +6,14 @@ class UsersController < ApplicationController
     end
 
     def show
-        user = User.includes(containers: :contents).find_by(id: session[:user_id])
-        render json: user, include: {containers: :contents}, status: :ok
+        user = User.includes(:teams, containers: :contents).find_by(id: session[:user_id])
+        if user
+            render json: user, include: [:teams, {containers: :contents }], status: :ok
+        else
+            render json: { error: "User not found" }, status: :not_found
+        end
     end
+
 
     def create
         user = User.create!(user_params)
