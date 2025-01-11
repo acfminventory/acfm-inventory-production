@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Modal from "../components/Modal";
 import { GrPowerReset } from "react-icons/gr";
+import { FilterContext } from "../contexts/FilterContext";
 
 function Shelves() {
   const { loading: productsLoading } = useContext(ProductsContext);
@@ -20,15 +21,25 @@ function Shelves() {
     { product_id: "", concentration: "" },
   ]);
   const [loading, setLoading] = useState(true);
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [selectedConcentration, setSelectedConcentration] = useState("");
-  const [selectedProduct2, setSelectedProduct2] = useState("");
-  const [selectedConcentration2, setSelectedConcentration2] = useState("");
-  const [selectedTeam, setSelectedTeam] = useState("");
   const [expires, setExpires] = useState("");
-  const [filterExpiresSoon, setFilterExpiresSoon] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [modalType, setModalType] = useState("premix"); // 'premix' or 'concentrate'
+  const {
+  selectedProduct,
+  setSelectedProduct,
+  selectedConcentration,
+  setSelectedConcentration,
+  selectedProduct2,
+  setSelectedProduct2,
+  selectedConcentration2,
+  setSelectedConcentration2,
+  selectedTeam,
+  setSelectedTeam,
+  filterExpiresSoon,
+  setFilterExpiresSoon,
+  resetFilters
+} = useContext(FilterContext)
+
 
   const showToastMessage = () => {
     toast("Container added!", {
@@ -44,16 +55,6 @@ function Shelves() {
     setIsModalOpen(!isModalOpen);
   };
   const navigate = useNavigate();
-  const handleResetFilters = () => {
-    setSelectedProduct("");
-    setSelectedConcentration("");
-    setSelectedProduct2("");
-    setSelectedConcentration2("");
-    setSelectedTeam("");
-    setShelf(1);
-    setRow("A");
-    setFilterExpiresSoon(false);
-  };
 
   useEffect(() => {
     if (user && user.containers && products) {
@@ -71,6 +72,43 @@ function Shelves() {
     const formattedDate = sixMonthsFromNow.toISOString().slice(0, 10);
     setExpires(formattedDate);
   }, []);
+
+  useEffect(() => {
+    // Load saved filter states when component mounts
+    const savedFilters = JSON.parse(localStorage.getItem("shelvesFilters"));
+    if (savedFilters) {
+      setSelectedProduct(savedFilters.selectedProduct || "");
+      setSelectedConcentration(savedFilters.selectedConcentration || "");
+      setSelectedProduct2(savedFilters.selectedProduct2 || "");
+      setSelectedConcentration2(
+        savedFilters.selectedConcentration2 || ""
+      );
+      setSelectedTeam(savedFilters.selectedTeam || "");
+      setFilterExpiresSoon(savedFilters.filterExpiresSoon || false);
+      // Remove the saved filters after using them
+      localStorage.removeItem("shelvesFilters");
+    }
+  }, []);
+
+  // Add this effect to save filter states when they change
+  useEffect(() => {
+    const currentFilters = {
+      selectedProduct,
+      selectedConcentration,
+      selectedProduct2,
+      selectedConcentration2,
+      selectedTeam,
+      filterExpiresSoon,
+    };
+    localStorage.setItem("shelvesFilters", JSON.stringify(currentFilters));
+  }, [
+    selectedProduct,
+    selectedConcentration,
+    selectedProduct2,
+    selectedConcentration2,
+    selectedTeam,
+    filterExpiresSoon,
+  ]);
 
   if (loading || !user.containers || productsLoading) {
     return (
@@ -574,7 +612,7 @@ function Shelves() {
             {filterExpiresSoon ? "Show All Containers" : "Show Expiring Soon"}
           </button>
           <button
-            onClick={handleResetFilters}
+            onClick={resetFilters}
             className="reset-button"
             alt="reset button"
           >

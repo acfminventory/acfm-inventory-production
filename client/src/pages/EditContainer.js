@@ -135,7 +135,7 @@ function EditContainer() {
         }, 1000);
       })
       .catch((error) => {
-        setErrors([error.message]); // Set the error message in the errors state
+        setErrors([error.message]);
         console.error("Error updating container:", error);
       });
   }

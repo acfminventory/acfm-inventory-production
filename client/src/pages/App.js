@@ -17,6 +17,7 @@ import Help from "./Help";
 import NotFound from "./NotFound";
 import Teams from "./Teams";
 import Team from "./Team";
+import { FilterProvider } from "../contexts/FilterContext";
 
 function App() {
   const { user, loading: userLoading } = useContext(UserContext);
@@ -41,29 +42,31 @@ function App() {
   }
 
   return (
-    <div className="page">
-      <div className="page__content">
-        <header className="page__header">
-          <NavBar />
-        </header>
-        <main>
-          <Routes>
-            <Route path="/" element={<Shelves />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<Product />} />
-            <Route path="/products/:id/edit" element={<EditProduct />} />
-            <Route path="/containers/:id" element={<Container />} />
-            <Route path="/containers/:id/edit" element={<EditContainer />} />
-            <Route path="/totals" element={<Totals />} />
-            <Route path="/teams" element={<Teams />} />
-            <Route path="/teams/:id" element={<Team />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
+    <FilterProvider>
+      <div className="page">
+        <div className="page__content">
+          <header className="page__header">
+            <NavBar />
+          </header>
+          <main>
+            <Routes>
+              <Route path="/" element={<Shelves />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<Product />} />
+              <Route path="/products/:id/edit" element={<EditProduct />} />
+              <Route path="/containers/:id" element={<Container />} />
+              <Route path="/containers/:id/edit" element={<EditContainer />} />
+              <Route path="/totals" element={<Totals />} />
+              <Route path="/teams" element={<Teams />} />
+              <Route path="/teams/:id" element={<Team />} />
+              <Route path="/help" element={<Help />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </FilterProvider>
   );
 }
 
