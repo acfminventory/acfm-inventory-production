@@ -120,19 +120,21 @@ function Totals() {
             </tr>
           </thead>
           <tbody>
-            {uniquePrescriptions.map((item, index) => (
-              <tr key={index}>
-                <td className="premix-table__td">
-                  {item.prescription.map((entry, idx) => (
-                    <div key={idx} className="prescription-item">
-                      <div>{entry.concentration}%</div>
-                      <div>{entry.productName}</div>
-                    </div>
-                  ))}
-                </td>
-                <td className="totals__table-td">{item.quantity}</td>
-              </tr>
-            ))}
+            {uniquePrescriptions
+              .sort((a, b) => b.quantity - a.quantity)
+              .map((item, index) => (
+                <tr key={index}>
+                  <td className="premix-table__td">
+                    {item.prescription.map((entry, idx) => (
+                      <div key={idx} className="prescription-item">
+                        <div>{entry.concentration}%</div>
+                        <div>{entry.productName}</div>
+                      </div>
+                    ))}
+                  </td>
+                  <td className="totals__table-td">{item.quantity}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
