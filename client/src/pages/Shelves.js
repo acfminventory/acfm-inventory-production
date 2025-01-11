@@ -25,21 +25,20 @@ function Shelves() {
   const [quantity, setQuantity] = useState(1);
   const [modalType, setModalType] = useState("premix"); // 'premix' or 'concentrate'
   const {
-  selectedProduct,
-  setSelectedProduct,
-  selectedConcentration,
-  setSelectedConcentration,
-  selectedProduct2,
-  setSelectedProduct2,
-  selectedConcentration2,
-  setSelectedConcentration2,
-  selectedTeam,
-  setSelectedTeam,
-  filterExpiresSoon,
-  setFilterExpiresSoon,
-  resetFilters
-} = useContext(FilterContext)
-
+    selectedProduct,
+    setSelectedProduct,
+    selectedConcentration,
+    setSelectedConcentration,
+    selectedProduct2,
+    setSelectedProduct2,
+    selectedConcentration2,
+    setSelectedConcentration2,
+    selectedTeam,
+    setSelectedTeam,
+    filterExpiresSoon,
+    setFilterExpiresSoon,
+    resetFilters,
+  } = useContext(FilterContext);
 
   const showToastMessage = () => {
     toast("Container added!", {
@@ -80,15 +79,20 @@ function Shelves() {
       setSelectedProduct(savedFilters.selectedProduct || "");
       setSelectedConcentration(savedFilters.selectedConcentration || "");
       setSelectedProduct2(savedFilters.selectedProduct2 || "");
-      setSelectedConcentration2(
-        savedFilters.selectedConcentration2 || ""
-      );
+      setSelectedConcentration2(savedFilters.selectedConcentration2 || "");
       setSelectedTeam(savedFilters.selectedTeam || "");
       setFilterExpiresSoon(savedFilters.filterExpiresSoon || false);
       // Remove the saved filters after using them
       localStorage.removeItem("shelvesFilters");
     }
-  }, []);
+  }, [
+    setSelectedProduct,
+    setSelectedConcentration,
+    setSelectedProduct2,
+    setSelectedConcentration2,
+    setSelectedTeam,
+    setFilterExpiresSoon,
+  ]);
 
   // Add this effect to save filter states when they change
   useEffect(() => {
