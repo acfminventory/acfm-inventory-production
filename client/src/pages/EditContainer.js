@@ -131,7 +131,7 @@ function EditContainer() {
         setUser({ ...user, containers: updatedContainers });
         showToastMessage();
         setTimeout(() => {
-          navigate("/");
+          navigate(-2);
         }, 1000);
       })
       .catch((error) => {
