@@ -70,7 +70,7 @@ function Container() {
         showToastMessage();
         setTimeout(() => {
           setUser({ ...user, containers: updatedContainers });
-          navigate("/");
+          navigate(-1);
         }, 1000);
       })
       .catch((error) => {
