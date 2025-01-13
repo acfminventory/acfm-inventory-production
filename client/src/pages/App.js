@@ -22,6 +22,7 @@ import { FilterProvider } from "../contexts/FilterContext";
 function App() {
   const { user, loading: userLoading } = useContext(UserContext);
   const { loading: productsLoading } = useContext(ProductsContext);
+  const [yScroll, setYScroll] = useState(0);
 
   if (userLoading || productsLoading) {
     return (
@@ -50,12 +51,25 @@ function App() {
           </header>
           <main>
             <Routes>
-              <Route path="/" element={<Shelves />} />
+              <Route
+                path="/"
+                element={<Shelves yScroll={yScroll} setYScroll={setYScroll} />}
+              />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<Product />} />
               <Route path="/products/:id/edit" element={<EditProduct />} />
-              <Route path="/containers/:id" element={<Container />} />
-              <Route path="/containers/:id/edit" element={<EditContainer />} />
+              <Route
+                path="/containers/:id"
+                element={
+                  <Container yScroll={yScroll} setYScroll={setYScroll} />
+                }
+              />
+              <Route
+                path="/containers/:id/edit"
+                element={
+                  <EditContainer yScroll={yScroll} setYScroll={setYScroll} />
+                }
+              />
               <Route path="/totals" element={<Totals />} />
               <Route path="/teams" element={<Teams />} />
               <Route path="/teams/:id" element={<Team />} />

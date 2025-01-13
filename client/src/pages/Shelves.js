@@ -9,7 +9,7 @@ import Modal from "../components/Modal";
 import { GrPowerReset } from "react-icons/gr";
 import { FilterContext } from "../contexts/FilterContext";
 
-function Shelves() {
+function Shelves({ yScroll, setYScroll, handleYScroll }) {
   const { loading: productsLoading } = useContext(ProductsContext);
   const { user, setUser } = useContext(UserContext);
   const teams = user.teams || [];
@@ -39,6 +39,37 @@ function Shelves() {
     setFilterExpiresSoon,
     resetFilters,
   } = useContext(FilterContext);
+
+  useEffect(() => {
+    // Add scroll event listener when component mounts
+    const handleScroll = () => {
+      setYScroll(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Scroll to saved position once content is loaded
+    if (yScroll > 0) {
+      // Create an observer to watch for changes in the DOM
+      const observer = new MutationObserver((mutations) => {
+        // Check if our table content is loaded
+        const tableContent = document.querySelector(".inventory-table");
+        if (tableContent) {
+          window.scrollTo(0, yScroll);
+          observer.disconnect(); // Stop observing once we've scrolled
+        }
+      });
+
+      // Start observing the document with the configured parameters
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    // Cleanup
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [yScroll, setYScroll]); // Add dependencies
 
   const showToastMessage = () => {
     toast("Container added!", {

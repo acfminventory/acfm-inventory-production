@@ -70,7 +70,7 @@ function Container() {
         showToastMessage();
         setTimeout(() => {
           setUser({ ...user, containers: updatedContainers });
-          navigate(-1);
+          navigate("/");
         }, 1000);
       })
       .catch((error) => {
@@ -86,8 +86,16 @@ function Container() {
     .slice()
     .sort((a, b) => b.concentration - a.concentration);
 
+  const handleBack = () => {
+    // Save current scroll position before navigating
+    navigate("/");
+  };
+
   return (
     <div className="flex-column-center page-height">
+      <button onClick={handleBack} className="button">
+        Back to Shelves
+      </button>
       <table className="inventory-table margin-top-4em">
         <thead>
           <tr>
