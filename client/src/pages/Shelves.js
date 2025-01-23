@@ -655,28 +655,29 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
           </button>
         </div>
 
-        <div>
-          <div className="flex-column">
-            <div className="add-buttons">
-              <button
-                className="button button--add modal-button"
-                onClick={handleAddPremix}
-              >
-                Add Premix
-              </button>
-              <button
-                className="button button--add modal-button"
-                onClick={handleAddConcentrate}
-              >
-                Add Concentrate
-              </button>
-            </div>
-
-            <span className="flex-column__span">
-              Selected Prescription: {tableRows.length} Containers
-            </span>
+        <div className="flex-column sticky">
+          <div className="add-buttons">
+            <button
+              className="button button--add modal-button"
+              onClick={handleAddPremix}
+            >
+              Add Premix
+            </button>
+            <button
+              className="button button--add modal-button"
+              onClick={handleAddConcentrate}
+            >
+              Add Concentrate
+            </button>
           </div>
         </div>
+
+        <div className="flex-column">
+          <span className="flex-column__span">
+            Selected Prescription: {tableRows.length} Containers
+          </span>
+        </div>
+
         <div className="inventory-table-container">
           {filteredContainers.length > 0 ? (
             <table className="inventory-table">

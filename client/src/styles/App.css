@@ -658,7 +658,7 @@ table tr:nth-of-type(even) {
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  margin: 2em;
+  margin: 1em;
 }
 
 .flex-column__span {
@@ -671,6 +671,13 @@ table tr:nth-of-type(even) {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.flex-column.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #d4c9c1;
 }
 
 .link-button {
