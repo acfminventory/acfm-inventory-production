@@ -8,6 +8,7 @@ function Teams() {
   const [creationLogs, setCreationLogs] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [containerCounts, setContainerCounts] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -25,6 +26,7 @@ function Teams() {
 
   useEffect(() => {
     const fetchCreationLogs = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(`/creation-logs`);
         if (!response.ok) {
@@ -40,6 +42,8 @@ function Teams() {
       } catch (error) {
         console.error("Error fetching creation logs:", error);
         setCreationLogs([]);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -102,7 +106,20 @@ function Teams() {
                 <td>
                   <Link to={`/teams/${team.id}`}>{team.name}</Link>
                 </td>
-                <td>{containerCounts[team.id] || 0}</td>
+                <td>
+                  {isLoading ? (
+                    <div
+                      className="loading-spinner"
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                      }}
+                    ></div>
+                  ) : (
+                    containerCounts[team.id] || 0
+                  )}
+                </td>
                 <td>{team.containers.length || 0}</td>
               </tr>
             ))}

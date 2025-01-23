@@ -930,8 +930,6 @@ span {
   color: #404c24 !important; /* Color of the progress bar */
 }
 
-
-
 @media (max-width: 650px) {
   #navbar {
     font-size: 0.9em;
@@ -1020,6 +1018,7 @@ table th {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  background-color: #d4c9c1;
 }
 
 .loading-spinner {
