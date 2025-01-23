@@ -23,7 +23,8 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
   const [loading, setLoading] = useState(true);
   const [expires, setExpires] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [modalType, setModalType] = useState("premix"); // 'premix' or 'concentrate'
+  const [modalType, setModalType] = useState("premix");
+  const [sortDirection, setSortDirection] = useState("desc");
   const {
     selectedProduct,
     setSelectedProduct,
@@ -41,7 +42,6 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
   } = useContext(FilterContext);
 
   useEffect(() => {
-    // Add scroll event listener when component mounts
     const handleScroll = () => {
       setYScroll(window.scrollY);
     };
@@ -69,7 +69,7 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
 
     // Cleanup
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [yScroll, setYScroll]); // Add dependencies
+  }, [yScroll, setYScroll]);
 
   const showToastMessage = () => {
     toast("Container added!", {
@@ -104,7 +104,6 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
   }, []);
 
   useEffect(() => {
-    // Load saved filter states when component mounts
     const savedFilters = JSON.parse(localStorage.getItem("shelvesFilters"));
     if (savedFilters) {
       setSelectedProduct(savedFilters.selectedProduct || "");
@@ -113,7 +112,6 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
       setSelectedConcentration2(savedFilters.selectedConcentration2 || "");
       setSelectedTeam(savedFilters.selectedTeam || "");
       setFilterExpiresSoon(savedFilters.filterExpiresSoon || false);
-      // Remove the saved filters after using them
       localStorage.removeItem("shelvesFilters");
     }
   }, [
@@ -125,7 +123,6 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
     setFilterExpiresSoon,
   ]);
 
-  // Add this effect to save filter states when they change
   useEffect(() => {
     const currentFilters = {
       selectedProduct,
@@ -169,7 +166,7 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
   };
 
   function handleExpiresChange(event) {
-    setExpires(event.target.value.slice(0, 10)); // Slice date to exclude time
+    setExpires(event.target.value.slice(0, 10));
   }
 
   function handleQuantityChange(e) {
@@ -212,15 +209,13 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
       .then((r) => {
         if (r.ok) {
           r.json().then((containers) => {
-            // Update here to handle an array of containers
             containers.forEach((newContainer) => {
-              newContainer.expires = expires; // Update expires if necessary
+              newContainer.expires = expires;
             });
             setUser((prevUser) => ({
               ...prevUser,
-              containers: [...prevUser.containers, ...containers], // Spread the new containers
+              containers: [...prevUser.containers, ...containers],
             }));
-            // Reset state after adding containers
             setShelf(1);
             setRow("A");
             setQuantity(1);
@@ -277,11 +272,11 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
       today.getDate()
     );
     const formattedDate = twoYearsFromNow.toISOString().slice(0, 10);
-    // Set default team to Facilities for concentrates
+
     const facilitiesTeam = teams.find((team) => team.name === "Facilities");
     setSelectedTeam(facilitiesTeam ? facilitiesTeam.id : "");
     setModalType("concentrate");
-    // Set concentration to 100% by default
+
     setContents([{ product_id: "", concentration: "100" }]);
     setIsModalOpen(true);
     setExpires(formattedDate);
@@ -319,11 +314,22 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
     );
   });
 
+  const handleSort = () => {
+    setSortDirection((current) => (current === "asc" ? "desc" : "asc"));
+  };
+
   const sortedContainers = filteredContainers.slice().sort((a, b) => {
-    if (a.shelf !== b.shelf) {
-      return b.shelf - a.shelf;
+    if (sortDirection === "asc") {
+      if (a.shelf !== b.shelf) {
+        return a.shelf - b.shelf;
+      }
+      return a.row.localeCompare(b.row);
+    } else {
+      if (a.shelf !== b.shelf) {
+        return b.shelf - a.shelf;
+      }
+      return a.row.localeCompare(b.row);
     }
-    return a.row.localeCompare(b.row);
   });
 
   const sortedProducts = products
@@ -685,7 +691,9 @@ function Shelves({ yScroll, setYScroll, handleYScroll }) {
                 <tr>
                   <th>Expires</th>
                   <th>Team</th>
-                  <th>Shelf</th>
+                  <th onClick={handleSort} style={{ cursor: "pointer" }}>
+                    Shelf {sortDirection === "asc" ? "↑" : "↓"}
+                  </th>
                   <th>Row</th>
                   <th colSpan={maxContents}>Contents</th>
                 </tr>

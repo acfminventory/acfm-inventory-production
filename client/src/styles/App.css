@@ -676,7 +676,6 @@ table tr:nth-of-type(even) {
 .flex-column.sticky {
   position: sticky;
   top: 0;
-  z-index: 100;
   background-color: #d4c9c1;
 }
 
